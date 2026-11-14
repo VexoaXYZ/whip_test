@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>whip_test Report</title>
+<link rel="stylesheet" href="css/report.css">
+<link rel="stylesheet" href="css/load.css">
+<link rel="stylesheet" href="css/menu.css">
+</head>
+<body>
+<!-- The /test menu: a card per section (shared/sections.lua), built by js/menu.js. -->
+<div id="menu-overlay" class="hidden">
+  <div id="menu-panel">
+    <div id="menu-header">
+      <div>
+        <h1>whip_core Tests</h1>
+        <p id="menu-sub">Pick a section to test just that — or run everything.</p>
+      </div>
+      <button id="menu-run-all" onclick="runSection('all')">
+        <span class="run-all-title">&#9654; Run full suite</span>
+        <span class="run-all-count" id="menu-total"></span>
+      </button>
+      <button id="menu-close" onclick="closeMenu()" title="Close (Esc)">&times;</button>
+    </div>
+    <div id="menu-grid"></div>
+    <div id="menu-footer">
+      Straight from chat: <code>/test all</code> runs everything, <code>/test vehicles</code> runs one section.
+    </div>
+  </div>
+</div>
+<div id="endurance-hud" class="hidden">
+  <div id="endurance-header">ENDURANCE TEST</div>
+  <div id="endurance-stats"></div>
+  <div id="endurance-systems"></div>
+</div>
+<!-- Built entirely by js/load.js, the same way whip_core's vehicle overlay builds itself. -->
+<div id="load-hud"></div>
+<div id="report-overlay" class="hidden">
+  <div id="report-card">
+    <div id="report-header">
+      <h1>whip_core Test Report</h1>
+      <div id="report-summary"></div>
+    </div>
+    <div id="report-body"></div>
+    <div id="report-footer">
+      <button id="btn-menu" onclick="backToMenu()">Test menu</button>
+      <button id="btn-copy" onclick="copyFailures()">Copy Failures</button>
+      <button id="btn-close" onclick="closeReport()">Close</button>
+    </div>
+  </div>
+</div>
+<script src="js/report.js"></script>
+<script src="js/load.js"></script>
+<script src="js/menu.js"></script>
+</body>
+</html>

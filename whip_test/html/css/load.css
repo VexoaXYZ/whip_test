@@ -1,0 +1,155 @@
+/* Live load-test panel.
+ *
+ * Lifted wholesale from whip_core's vehicle cost overlay (html/css/veh-debug.css) and reconfigured,
+ * rather than restyled from scratch — these two panels do the same job. Both exist to be watched
+ * while something is happening, and both answer "which number is moving?". They should look like
+ * the same instrument because they are.
+ *
+ * whip's house language: flat surface rgba(10,12,18,0.75), 0.08 hairline, the 20/12/8 radius
+ * ladder, Plus Jakarta Sans throughout, with even-width figures for anything the eye has to
+ * compare (DM Mono until whip dropped it, 10 Oct 2026).
+ *
+ * Numbers are tabular-nums and right-aligned on purpose — a digit that shifts sideways as it
+ * changes is a digit you cannot read at a glance.
+ */
+
+#load-hud {
+    position: fixed;
+
+    /* BOTTOM-LEFT, where the vehicle overlay is top-right. During a load test you may well want
+     * whip_core's overlay open at the same time, and two panels fighting for the same corner would
+     * make both useless. */
+    left: 20px;
+    bottom: 20px;
+
+    /* Size to the content, not to a guess: the panel grows to fit its widest label, with a cap so
+     * it can never take over the screen. A clipped label defeats the point of the panel. */
+    width: max-content;
+    min-width: 360px;
+    max-width: 540px;
+
+    background: rgba(10, 12, 18, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+    padding: 14px 16px;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    color: rgba(255, 255, 255, 0.93);
+
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(12px);
+    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 60;
+}
+
+#load-hud.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.lt-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.lt-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.lt-speed {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    color: #60a5fa;
+}
+
+/* One grid for the whole table, so the columns align down the panel while the label column is
+ * free to size itself to the widest label. Four children per row, in order. */
+.lt-grid {
+    display: grid;
+    grid-template-columns: auto 120px 56px 30px;
+    align-items: center;
+    column-gap: 10px;
+    row-gap: 4px;
+}
+
+.lt-rule {
+    grid-column: 1 / -1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 5px 0;
+}
+
+.lt-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    white-space: pre;          /* indented sub-rows keep their leading spaces */
+}
+
+/* Section captions — PRESSURE / DATABASE / SERVER. The vehicle overlay separates its groups with
+ * a rule alone, which works when there are three of them. This panel has three groups measuring
+ * genuinely different things, and an unlabelled rule would leave you guessing which is which. */
+.lt-section {
+    grid-column: 1 / -1;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.3);
+    margin-top: 3px;
+}
+
+.lt-spark {
+    display: block;
+    width: 120px;
+    height: 18px;
+}
+
+.lt-value {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    color: rgba(255, 255, 255, 0.93);
+}
+
+.lt-unit {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-variant-numeric: tabular-nums;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.25);
+}
+
+/* Latency and drift are the point of this panel; the dials above them are what produced it. */
+.lt-label.lt-key { color: rgba(255, 255, 255, 0.93); font-weight: 600; }
+.lt-value.lt-key { font-size: 15px; }
+
+/* The dials are settings, not findings — quieter, so the eye goes to what moved. */
+.lt-value.lt-dial { color: rgba(255, 255, 255, 0.5); }
+
+/* Severity. Stated once and quietly rather than flashing, because during a load test you are
+ * reading this while the server is busy and a blinking panel is a panel you stop trusting. */
+.lt-value.lt-warn { color: #fbbf24; }
+.lt-value.lt-hot  { color: #f87171; }
+.lt-value.lt-good { color: #4ade80; }
+
+.lt-foot {
+    margin-top: 11px;
+    padding-top: 9px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 10.5px;
+    color: rgba(255, 255, 255, 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #load-hud { transition: none; }
+}

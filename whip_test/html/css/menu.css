@@ -1,0 +1,245 @@
+/* ── The /test menu ──
+   Same palette as the report (report.css), so the two read as one tool: the menu picks what to
+   test, the report says how it went. The status colours are the report's pass/fail/skip ones. */
+
+#menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+#menu-panel {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 14px;
+  width: 1080px;
+  max-height: 86vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+  zoom: var(--ui-scale, 1);
+}
+
+/* ── Header: title, the full-suite button, close ── */
+
+#menu-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid #21262d;
+}
+
+#menu-header > div { flex: 1; }
+
+#menu-header h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #e6edf3;
+}
+
+#menu-sub {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #8b949e;
+}
+
+#menu-run-all {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 10px 22px;
+  background: #1a3a2a;
+  border: 1px solid #3fb950;
+  border-radius: 10px;
+  color: #3fb950;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+#menu-run-all:hover {
+  background: #22543d;
+  transform: translateY(-1px);
+}
+
+.run-all-title {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.run-all-count {
+  font-size: 11px;
+  color: #7ee2a0;
+  margin-top: 2px;
+}
+
+#menu-close {
+  width: 36px;
+  height: 36px;
+  background: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  color: #8b949e;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+#menu-close:hover {
+  background: #30363d;
+  color: #e6edf3;
+}
+
+/* ── The section cards ── */
+
+#menu-grid {
+  flex: 1;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  padding: 20px 28px;
+}
+
+.section-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 16px 14px 20px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s, background 0.15s;
+  overflow: hidden;
+}
+
+/* The status stripe down the left edge — the at-a-glance "how did this do last time". */
+.section-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #30363d;
+}
+
+.section-card.st-pass::before    { background: #3fb950; }
+.section-card.st-fail::before    { background: #f85149; }
+.section-card.st-skip::before    { background: #d29922; }
+.section-card.st-partial::before { background: #d29922; }
+
+.section-card:hover {
+  border-color: #58a6ff;
+  background: #1a2230;
+  transform: translateY(-2px);
+}
+
+.section-card.running {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.card-icon {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+}
+
+.card-title {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 700;
+  color: #e6edf3;
+}
+
+/* Appears on hover: clicking the card runs it. */
+.card-run {
+  font-size: 11px;
+  font-weight: 700;
+  color: #58a6ff;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.section-card:hover .card-run { opacity: 1; }
+
+.card-desc {
+  font-size: 12px;
+  line-height: 1.45;
+  color: #8b949e;
+  min-height: 34px;
+}
+
+.card-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.card-counts {
+  flex: 1;
+  font-size: 11px;
+  color: #6e7681;
+}
+
+.card-status {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 10px;
+  background: #21262d;
+  color: #8b949e;
+}
+
+.card-status.st-pass    { background: #1a3a2a; color: #3fb950; }
+.card-status.st-fail    { background: #3d1418; color: #f85149; }
+.card-status.st-skip    { background: #3a2e12; color: #d29922; }
+.card-status.st-partial { background: #3a2e12; color: #d29922; }
+
+.card-ago {
+  font-size: 10px;
+  color: #6e7681;
+}
+
+/* ── Footer hint ── */
+
+#menu-footer {
+  padding: 12px 28px 16px;
+  border-top: 1px solid #21262d;
+  font-size: 12px;
+  color: #6e7681;
+}
+
+#menu-footer code {
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #c9d1d9;
+  background: #161b22;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+#menu-grid::-webkit-scrollbar { width: 6px; }
+#menu-grid::-webkit-scrollbar-track { background: transparent; }
+#menu-grid::-webkit-scrollbar-thumb { background: #30363d; border-radius: 3px; }
